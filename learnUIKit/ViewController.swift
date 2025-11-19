@@ -1,50 +1,89 @@
-//
-//  ViewController.swift
-//  learnUIKit
-//
-//  Created by Максим Минаков on 14.11.2025.
-//
-
 import UIKit
 
 class ViewController: UIViewController {
-
+    
+    lazy var emailField = createTextField(placeholder: "Email")
+    lazy var passwordField = createTextField(placeholder: "Password", isPassword: true)
+    
+    var textEdit: UITextView = {
+        let textView = UITextView()
+        textView.translatesAutoresizingMaskIntoConstraints = false
+        textView.backgroundColor = .magenta
+        textView.layer.cornerRadius = 15
+        textView.font = .systemFont(ofSize: 16)
+        return textView
+    }()
+    
+    var sendBtn: UIButton = {
+       let btn = UIButton()
+        btn.translatesAutoresizingMaskIntoConstraints = false
+        btn.setTitle("send", for: .normal)
+        btn.setTitleColor(.blue, for: .normal)
+        btn.backgroundColor = .orange
+        btn.layer.cornerRadius = 25
+        btn.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        return btn
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
-        print("Hello")
         
-        view.backgroundColor = .orange
-        // label
-        let label = UILabel()
-        label.text = "Hello world"
-        label.frame = CGRect(x: 100, y: 100, width: 300, height: 50)
-        label.textColor = .blue
-        label.font = .systemFont(ofSize: 50)
-        view.addSubview(label)
-        print(view.frame)
+        view.addSubview(emailField)
+        view.addSubview(passwordField)
+        view.addSubview(textEdit)
+        view.addSubview(sendBtn)
+        createConstraint()
+    }
+    
+    private func createConstraint(){
+        NSLayoutConstraint.activate([
+            // constraint emailField
+            emailField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
+            emailField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
+            emailField.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            emailField.heightAnchor.constraint(equalToConstant: 30),
+            
+            // constraint password
+            passwordField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
+            passwordField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
+            passwordField.topAnchor.constraint(equalTo: emailField.bottomAnchor, constant: 20),
+            passwordField.heightAnchor.constraint(equalToConstant: 40),
+            
+            // constraint textEdit
+            textEdit.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
+            textEdit.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
+            textEdit.topAnchor.constraint(equalTo: passwordField.bottomAnchor, constant: 40),
+            textEdit.heightAnchor.constraint(equalToConstant: 60),
+            
+            // constraint button
+            sendBtn.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
+            sendBtn.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
+            sendBtn.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -30),
+            sendBtn.heightAnchor.constraint(equalToConstant: 50),
+        ])
+    }
+    
+    private func createTextField(placeholder: String, isPassword: Bool = false) -> UITextField {
+        let textField = UITextField()
+        textField.placeholder = placeholder
+        textField.isSecureTextEntry = isPassword
+        textField.backgroundColor = .green
+        textField.layer.cornerRadius = 20
         
-        // image
-        let someImageView = UIImageView()
-        someImageView.frame = CGRect(x: 100, y: 200, width: 300, height: 300)
-        someImageView.backgroundColor = .green
-        someImageView.image = UIImage(named: "img1")
-        someImageView.contentMode = .scaleAspectFill
-        view.addSubview(someImageView)
+        // TAMIC
+        textField.translatesAutoresizingMaskIntoConstraints = false
         
-        // button
-        let action = UIAction { _ in
-            someImageView.frame = self.view.frame
-        }
+        textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 8, height: 0))
+        textField.leftViewMode = .always
         
-        let button = UIButton(frame: CGRect(x: 50,
-                                            y: 600,
-                                            width: 200,
-                                            height: 80), primaryAction: action)
+        textField.rightView = UIView(frame: CGRect(x: 0, y: 0, width: 8, height: 0))
+        textField.rightViewMode = .always
         
-        button.setTitle("btn", for: .normal)
-        button.backgroundColor = .green
-        view.addSubview(button)
+        return textField
     }
 }
 
+// 1 - Инициализация класса, инициализируются все переменные, обращаемся из функции то любая переменная 100% готова
+// lazy var - ждёт вызова и благодаря lazy мы можем вынести констрейнт в другую функцию а функцию объявить в класссе и она сработает
+
+// Если есть одинаковые элементы то выносить в функцию
