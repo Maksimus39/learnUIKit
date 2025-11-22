@@ -1,30 +1,29 @@
 import UIKit
 
-class ViewController: UIViewController {
+
+class SettingsViewController: UIViewController {
     
-    lazy  var action: UIAction = UIAction { [weak self] _ in
+    lazy  var action: UIAction = UIAction { _ in
         //1
-        let settingView = SettingsViewController()
+        //let viewController = ViewController()
         
         //2
-        self?.navigationController?.pushViewController(settingView, animated: true)
+        self.navigationController?.popViewController(animated: true)
     }
     
     lazy  var btn: UIButton = {
-        $0.setTitle("Settings", for: .normal)
+        $0.setTitle("back to home", for: .normal)
         $0.translatesAutoresizingMaskIntoConstraints = false
         
         return $0
     }(UIButton(primaryAction: action))
     
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .orange
-        title = "Hello world"
-        navigationController?.navigationBar.prefersLargeTitles = true
+        view.backgroundColor = .brown
+        title = "back to home"
         
         view.addSubview(btn)
         
@@ -32,5 +31,9 @@ class ViewController: UIViewController {
             btn.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             btn.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
+    }
+    
+    deinit {
+        print("close settings")
     }
 }
