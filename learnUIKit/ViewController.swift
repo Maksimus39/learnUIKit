@@ -211,18 +211,17 @@ class ViewController: UIViewController {
             // constraint welcomeLabel
             welcomeLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 63),
             welcomeLabel.leadingAnchor.constraint(equalTo: profileImageView.trailingAnchor, constant: 14),
-            welcomeLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -200),
-            welcomeLabel.widthAnchor.constraint(equalToConstant: 15),
+            welcomeLabel.trailingAnchor.constraint(equalTo: bellImageView.leadingAnchor, constant: -10),
+            welcomeLabel.heightAnchor.constraint(equalToConstant: 15),
             
             // constraint usernameLabel
             usernameLabel.topAnchor.constraint(equalTo: welcomeLabel.bottomAnchor, constant: 4),
             usernameLabel.leadingAnchor.constraint(equalTo: profileImageView.trailingAnchor, constant: 14),
-            usernameLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -200),
-            usernameLabel.widthAnchor.constraint(equalToConstant: 19),
+            usernameLabel.trailingAnchor.constraint(equalTo: bellImageView.leadingAnchor, constant: -10),
+            usernameLabel.heightAnchor.constraint(equalToConstant: 19),
             
             // constraint bellImageView
             bellImageView.topAnchor.constraint(equalTo: view.topAnchor, constant: 73),
-            bellImageView.leadingAnchor.constraint(equalTo: profileImageView.trailingAnchor, constant: 250),
             bellImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
             bellImageView.heightAnchor.constraint(equalToConstant: 20),
             bellImageView.widthAnchor.constraint(equalToConstant: 20),
@@ -230,7 +229,6 @@ class ViewController: UIViewController {
             // constraint searchTextField
             searchTextField.topAnchor.constraint(equalTo: profileImageView.bottomAnchor, constant: 47),
             searchTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
-            searchTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -90),
             searchTextField.heightAnchor.constraint(equalToConstant: 50),
             
             // constraint searchButton
@@ -238,6 +236,7 @@ class ViewController: UIViewController {
             searchButton.leadingAnchor.constraint(equalTo: searchTextField.trailingAnchor, constant: 10),
             searchButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
             searchButton.heightAnchor.constraint(equalToConstant: 50),
+            searchButton.widthAnchor.constraint(equalToConstant: 50),
             
             // constraint searchIconImageView
             searchIconImageView.centerXAnchor.constraint(equalTo: searchButton.centerXAnchor),
@@ -248,12 +247,11 @@ class ViewController: UIViewController {
             // constraint popularTripLabel
             popularTripLabel.topAnchor.constraint(equalTo: searchTextField.bottomAnchor, constant: 50),
             popularTripLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
-            popularTripLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -200),
+            popularTripLabel.trailingAnchor.constraint(lessThanOrEqualTo: seeAllLabel.leadingAnchor, constant: -8),
             popularTripLabel.heightAnchor.constraint(equalToConstant: 22),
             
             // constraint seeAllLabel
             seeAllLabel.topAnchor.constraint(equalTo: searchButton.bottomAnchor, constant: 53),
-            seeAllLabel.leadingAnchor.constraint(equalTo: popularTripLabel.trailingAnchor, constant: 124),
             seeAllLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -31),
             seeAllLabel.heightAnchor.constraint(equalToConstant: 15),
             
@@ -267,12 +265,11 @@ class ViewController: UIViewController {
             // constraint popularCategoryLabel
             popularCategoryLabel.topAnchor.constraint(equalTo: popularTripContainerView.bottomAnchor, constant: 59),
             popularCategoryLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
-            popularCategoryLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -150),
+            popularCategoryLabel.trailingAnchor.constraint(lessThanOrEqualTo: seeAllLabelTwo.leadingAnchor, constant: -8),
             popularCategoryLabel.heightAnchor.constraint(equalToConstant: 22),
-            
+             
             // constraint seeAllLabelTwo
             seeAllLabelTwo.topAnchor.constraint(equalTo: popularTripContainerView.bottomAnchor, constant: 64),
-            seeAllLabelTwo.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 305),
             seeAllLabelTwo.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -31),
             seeAllLabelTwo.heightAnchor.constraint(equalToConstant: 15),
             
@@ -293,7 +290,7 @@ class ViewController: UIViewController {
             
             // constraint heartImageView
             heartImageView.topAnchor.constraint(equalTo: popularTripImageView.topAnchor, constant: 14),
-            heartImageView.leadingAnchor.constraint(equalTo: popularTripImageView.leadingAnchor, constant: 272),
+            heartImageView.trailingAnchor.constraint(equalTo: popularTripImageView.trailingAnchor, constant: -15),
             heartImageView.widthAnchor.constraint(equalToConstant: 24),
             heartImageView.heightAnchor.constraint(equalToConstant: 24),
             
@@ -311,7 +308,7 @@ class ViewController: UIViewController {
             
             // constraint detailNavigationButton
             detailNavigationButton.topAnchor.constraint(equalTo: popularTripImageView.bottomAnchor, constant: 14),
-            detailNavigationButton.leadingAnchor.constraint(equalTo: popularTripContainerView.leadingAnchor, constant: 289),
+            detailNavigationButton.trailingAnchor.constraint(equalTo: popularTripContainerView.trailingAnchor, constant: -13),
             detailNavigationButton.widthAnchor.constraint(equalToConstant: 20),
             detailNavigationButton.heightAnchor.constraint(equalToConstant: 20),
             
@@ -335,7 +332,7 @@ class ViewController: UIViewController {
             
             // constraint categoryNavigationButton
             categoryNavigationButton.topAnchor.constraint(equalTo: popularCategoryContainerView.topAnchor, constant: 20),
-            categoryNavigationButton.leadingAnchor.constraint(equalTo: popularTripContainerView.leadingAnchor, constant: 289),
+            categoryNavigationButton.trailingAnchor.constraint(equalTo: popularTripContainerView.trailingAnchor, constant: -13),
             categoryNavigationButton.widthAnchor.constraint(equalToConstant: 20),
             categoryNavigationButton.heightAnchor.constraint(equalToConstant: 20),
         ])
