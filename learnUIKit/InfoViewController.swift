@@ -6,23 +6,20 @@ class InfoViewController: UIViewController {
     private lazy var overviewLabel = createLabel(text: "Overview", fontSize: 18, weight: UIFont.Weight(rawValue: 700), textColor: .black)
     private lazy var greenlandTitleLabel = createLabel(text: "Greenland", fontSize: 18, weight: UIFont.Weight(rawValue: 700), textColor: .white)
     private lazy var greenlandNorthLabel = createLabel(text: "Greenland, North", fontSize: 12, weight: .regular, textColor: .white)
-    
-    private lazy var shadowContainerView: UIView = {
-        $0.translatesAutoresizingMaskIntoConstraints = false
-        $0.backgroundColor = .clear
-        $0.layer.shadowColor = UIColor.black.cgColor
-        $0.layer.shadowOpacity = 1
-        $0.layer.shadowOffset = .zero
-        $0.layer.shadowRadius = 10
-        return $0
-    }(UIView())
-    
+        
     private lazy var backgroundImage: UIImageView = {
         $0.translatesAutoresizingMaskIntoConstraints = false
         $0.image = UIImage(named: "rootPictureMountainInFog")
         $0.layer.cornerRadius = 26
         $0.clipsToBounds = true
         $0.contentMode = .scaleAspectFill
+        
+        // add shadow
+        $0.layer.shadowColor = UIColor.black.cgColor
+        $0.layer.shadowOpacity = 1
+        $0.layer.shadowOffset = .zero
+        $0.layer.shadowRadius = 10
+        
         return $0
     }(UIImageView())
     
@@ -106,13 +103,12 @@ class InfoViewController: UIViewController {
     }
     
     private func setupLayout() {
-        view.addSubview(shadowContainerView)
-        shadowContainerView.addSubview(backgroundImage)
-        shadowContainerView.addSubview(backButtonContainer)
-        shadowContainerView.addSubview(greenlandTitleLabel)
-        shadowContainerView.addSubview(greenlandNorthLabel)
-        shadowContainerView.addSubview(heartButtonContainer)
-        shadowContainerView.addSubview(heartImageView)
+        view.addSubview(backgroundImage)
+        backgroundImage.addSubview(backButtonContainer)
+        backgroundImage.addSubview(greenlandTitleLabel)
+        backgroundImage.addSubview(greenlandNorthLabel)
+        backgroundImage.addSubview(heartButtonContainer)
+        backgroundImage.addSubview(heartImageView)
         backButtonContainer.addSubview(backButton)
         view.addSubview(overviewLabel)
         view.addSubview(contentTextLabel)
@@ -132,26 +128,18 @@ class InfoViewController: UIViewController {
     
     // MARK: - Constraints
     private func setupConstraints() {
-        let screenWidth = view.frame.width
-        let rightOffset: CGFloat = screenWidth < 375 ? 14 : 25
         
         NSLayoutConstraint.activate([
             
             // constraint shadowContainerView
-            shadowContainerView.topAnchor.constraint(equalTo: view.topAnchor, constant: 82),
-            shadowContainerView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
-            shadowContainerView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
-            shadowContainerView.heightAnchor.constraint(equalToConstant: 304),
-            
-            // constraint backgroundImage
-            backgroundImage.topAnchor.constraint(equalTo: shadowContainerView.topAnchor),
-            backgroundImage.leadingAnchor.constraint(equalTo: shadowContainerView.leadingAnchor),
-            backgroundImage.trailingAnchor.constraint(equalTo: shadowContainerView.trailingAnchor),
-            backgroundImage.bottomAnchor.constraint(equalTo: shadowContainerView.bottomAnchor),
-            
+            backgroundImage.topAnchor.constraint(equalTo: view.topAnchor, constant: 82),
+            backgroundImage.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
+            backgroundImage.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
+            backgroundImage.heightAnchor.constraint(equalToConstant: 304),
+                        
             // constraint backButtonContainer
-            backButtonContainer.topAnchor.constraint(equalTo: shadowContainerView.topAnchor, constant: 15),
-            backButtonContainer.leadingAnchor.constraint(equalTo: shadowContainerView.leadingAnchor, constant: 14),
+            backButtonContainer.topAnchor.constraint(equalTo: backgroundImage.topAnchor, constant: 15),
+            backButtonContainer.leadingAnchor.constraint(equalTo: backgroundImage.leadingAnchor, constant: 14),
             backButtonContainer.widthAnchor.constraint(equalToConstant: 44),
             backButtonContainer.heightAnchor.constraint(equalToConstant: 44),
             
@@ -162,20 +150,20 @@ class InfoViewController: UIViewController {
             backButton.heightAnchor.constraint(equalToConstant: 20),
             
             // constraint greenlandTitleLabel
-            greenlandTitleLabel.topAnchor.constraint(equalTo: shadowContainerView.topAnchor, constant: 234),
-            greenlandTitleLabel.leadingAnchor.constraint(equalTo: shadowContainerView.leadingAnchor, constant: 14),
+            greenlandTitleLabel.topAnchor.constraint(equalTo: backgroundImage.topAnchor, constant: 234),
+            greenlandTitleLabel.leadingAnchor.constraint(equalTo: backgroundImage.leadingAnchor, constant: 14),
             greenlandTitleLabel.widthAnchor.constraint(equalToConstant: 130),
             greenlandTitleLabel.heightAnchor.constraint(equalToConstant: 22),
             
             // constraint greenlandNorthLabel
             greenlandNorthLabel.topAnchor.constraint(equalTo: greenlandTitleLabel.bottomAnchor, constant: 4),
-            greenlandNorthLabel.leadingAnchor.constraint(equalTo: shadowContainerView.leadingAnchor, constant: 14),
+            greenlandNorthLabel.leadingAnchor.constraint(equalTo: backgroundImage.leadingAnchor, constant: 14),
             greenlandNorthLabel.widthAnchor.constraint(equalToConstant: 138),
             greenlandNorthLabel.heightAnchor.constraint(equalToConstant: 15),
             
             // constraint heartButtonContainer
-            heartButtonContainer.topAnchor.constraint(equalTo: shadowContainerView.topAnchor, constant: 234),
-            heartButtonContainer.trailingAnchor.constraint(equalTo: shadowContainerView.trailingAnchor, constant: -rightOffset),
+            heartButtonContainer.topAnchor.constraint(equalTo: backgroundImage.topAnchor, constant: 234),
+            heartButtonContainer.trailingAnchor.constraint(equalTo: backgroundImage.trailingAnchor, constant: -14),
             heartButtonContainer.widthAnchor.constraint(equalToConstant: 44),
             heartButtonContainer.heightAnchor.constraint(equalToConstant: 30),
             
@@ -186,7 +174,7 @@ class InfoViewController: UIViewController {
             heartImageView.heightAnchor.constraint(equalToConstant: 17),
             
             // constraint overviewLabel
-            overviewLabel.topAnchor.constraint(equalTo: shadowContainerView.bottomAnchor, constant: 26),
+            overviewLabel.topAnchor.constraint(equalTo: backgroundImage.bottomAnchor, constant: 26),
             overviewLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
             overviewLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -100),
             overviewLabel.heightAnchor.constraint(equalToConstant: 22),

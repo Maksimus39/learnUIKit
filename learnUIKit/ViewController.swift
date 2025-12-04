@@ -297,13 +297,13 @@ class ViewController: UIViewController {
             // constraint greenlandTitleLabel
             greenlandTitleLabel.topAnchor.constraint(equalTo: popularTripImageView.bottomAnchor, constant: 13),
             greenlandTitleLabel.leadingAnchor.constraint(equalTo: popularTripContainerView.leadingAnchor, constant: 24),
-            greenlandTitleLabel.trailingAnchor.constraint(equalTo: popularTripContainerView.trailingAnchor, constant: -217),
+            greenlandTitleLabel.trailingAnchor.constraint(equalTo: popularTripContainerView.trailingAnchor, constant: -10),
             greenlandTitleLabel.heightAnchor.constraint(equalToConstant: 22),
             
             // constraint greenlandNorthLabel
             greenlandNorthLabel.topAnchor.constraint(equalTo: greenlandTitleLabel.bottomAnchor, constant: 4),
             greenlandNorthLabel.leadingAnchor.constraint(equalTo: popularTripContainerView.leadingAnchor, constant: 24),
-            greenlandNorthLabel.trailingAnchor.constraint(equalTo: popularTripContainerView.trailingAnchor, constant: -100),
+            greenlandNorthLabel.trailingAnchor.constraint(equalTo: popularTripContainerView.trailingAnchor, constant: -10),
             greenlandNorthLabel.heightAnchor.constraint(equalToConstant: 15),
             
             // constraint detailNavigationButton
@@ -327,7 +327,7 @@ class ViewController: UIViewController {
             // constraint greenlandTitleLabelTwo
             greenlandTitleLabelTwo.topAnchor.constraint(equalTo: mountainsTitleLabel.bottomAnchor, constant: 4),
             greenlandTitleLabelTwo.leadingAnchor.constraint(equalTo: categoryImageView.trailingAnchor, constant: 12),
-            greenlandTitleLabelTwo.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -170),
+            greenlandTitleLabelTwo.trailingAnchor.constraint(equalTo: categoryNavigationButton.leadingAnchor, constant: -10),
             greenlandTitleLabelTwo.heightAnchor.constraint(equalToConstant: 15),
             
             // constraint categoryNavigationButton
