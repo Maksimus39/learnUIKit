@@ -1,10 +1,3 @@
-//
-//  AppDelegate.swift
-//  learnUIKit
-//
-//  Created by Максим Минаков on 14.11.2025.
-//
-
 import UIKit
 
 @main
