@@ -1,25 +1,41 @@
 import UIKit
 
+class SecondViewController: UIViewController {
+    
+    private  let secondSettingMock = SecondSettingCellTableItem.secondSettingCellTableItemMock()
+    
+    private lazy var secondTableView: UITableView = {
+        $0.register(UITableViewCell.self, forCellReuseIdentifier: "cellSecond")
+        $0.dataSource = self
+        return $0
+    }(UITableView(frame: view.frame, style: .insetGrouped))
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = .clear
+        view.addSubview(secondTableView)
+    }
+}
+
 extension SecondViewController: UITableViewDataSource {
+    
     func numberOfSections(in tableView: UITableView) -> Int {
         2
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        SecondSettingCellTableItem.secondSettingCellTableItemMock().count
+        secondSettingMock.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let mock = SecondSettingCellTableItem.secondSettingCellTableItemMock()
-        
         let cell = tableView.dequeueReusableCell(withIdentifier: "cellSecond", for: indexPath)
         var config = cell.defaultContentConfiguration()
-        config.image = UIImage(systemName: mock[indexPath.row].icon)
-        config.text = mock[indexPath.row].title
+        config.image = UIImage(systemName: secondSettingMock[indexPath.row].icon)
+        config.text = secondSettingMock[indexPath.row].title
         
         if indexPath.section == 1 {
-            config.secondaryText = mock[indexPath.row].someText
+            config.secondaryText = secondSettingMock[indexPath.row].someText
         } else {
             config.secondaryText = nil
         }
