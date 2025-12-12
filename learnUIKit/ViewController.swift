@@ -1,110 +1,200 @@
+// Я не стал выносить дублирование логики каждого вспомогательного контроллера
+
 import UIKit
-
-enum PageType {
-    case details, user, profile
-}
-
-struct TableRow {
-    let image: String
-    let title: String
-    let subtitle: String
-    var type: PageType = .details
-}
-
-// Перенесите TableSection СЮДА — вне ViewController и его extension
-struct TableSection {
-    var header: String
-    var footer: String?
-    var items: [TableRow]
-    
-    static func mockData() -> [TableSection] {
-        [
-            TableSection(header: "Fruits", footer: nil, items: [
-                TableRow(image: "pencil.line", title: "Apple", subtitle: "Red"),
-                TableRow(image: "pencil.line", title: "Banana", subtitle: "Yellow", type: .user),
-                TableRow(image: "pencil.line", title: "Cherry", subtitle: "Red", type: .details),
-            ]),
-            
-            TableSection(header: "groups", footer: "footer for group - 2", items: [
-                TableRow(image: "pencil.line", title: "group - 2", subtitle: "some text"),
-                TableRow(image: "pencil.line", title: "group - 2", subtitle: "some text", type: .profile),
-                TableRow(image: "pencil.line", title: "group - 2", subtitle: "some text"),
-            ])
-        ]
-    }
-}
 
 class ViewController: UIViewController {
     
-    // Теперь TableSection доступен здесь
-    private var tableData = TableSection.mockData()
+    private var tableBookData = TableBookData.mockBookData()
     
-    lazy var tableView: UITableView = {
+    private lazy var tableView: UITableView = {
         $0.dataSource = self
-        $0.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        $0.backgroundColor = .lightGray
+        $0.register(UITableViewCell.self, forCellReuseIdentifier: "bookTableViewCell")
         $0.delegate = self
+        
         return $0
     }(UITableView(frame: view.frame, style: .insetGrouped))
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .darkGray
+        view.backgroundColor = .clear
         view.addSubview(tableView)
-        title = "Main VC"
+        title = "Общий список"
         navigationController?.navigationBar.prefersLargeTitles = true
     }
 }
 
 extension ViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        tableData.count
+        tableBookData.count
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        tableData[section].items.count
+        tableBookData[section].bookItems.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        let item = tableData[indexPath.section].items[indexPath.row]
+        let cell = tableView.dequeueReusableCell(withIdentifier: "bookTableViewCell", for: indexPath)
+        cell.backgroundColor = .white
+        
+        let bookItem = tableBookData[indexPath.section].bookItems[indexPath.row]
+        
         var config = cell.defaultContentConfiguration()
-        config.text = item.title
-        config.secondaryText = item.subtitle
-        config.image = UIImage(systemName: item.image)
+        config.text = bookItem.author
+        config.secondaryText = bookItem.title
+        config.image = UIImage(systemName: bookItem.icon)
+        
         cell.contentConfiguration = config
+        
+        let favoriteImageView = UIImageView(image: bookItem.isFavorite
+                                            ? UIImage(systemName: "heart.fill")
+                                            : UIImage(systemName: "heart"))
+        
+        favoriteImageView.tintColor = bookItem.isFavorite
+        ? .systemRed
+        : .systemGray
+        
+        cell.accessoryView = favoriteImageView
+        
+        cell.accessoryType = bookItem.isCompleted
+        ? .checkmark
+        : .none
+        
         return cell
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        tableData[section].header
+        tableBookData[section].header
     }
     
     func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
-        tableData[section].footer
+        tableBookData[section].footer
     }
 }
 
 extension ViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            tableData[indexPath.section].items.remove(at: indexPath.row)
-            tableView.deleteRows(at: [indexPath], with: .automatic)
+            tableBookData[indexPath.section].bookItems.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .bottom)
         }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let itemType = tableData[indexPath.section].items[indexPath.row].type
+        let themeBookType = tableBookData[indexPath.section].bookItems[indexPath.row].viewType
         
-        let vc: UIViewController?
         
-        switch itemType {
-        case .details:
-            vc = DetailsViewController(item: tableData[indexPath.section].items[indexPath.row])
-        case .user:
-            vc = UserViewController()
-        case .profile:
-            vc = ProfileViewController()
+        
+        switch themeBookType {
+        case .artistic:
+            let vc = ArtisticViewController(bookItem: tableBookData[indexPath.section].bookItems[indexPath.row])
+            pushViewController(vc)
+        case .technical:
+            let vc = TechnicalViewController(bookItem: tableBookData[indexPath.section].bookItems[indexPath.row])
+            pushViewController(vc)
+        case .personalGrowth:
+            let vc = PersonalGrowthViewController(bookItem: tableBookData[indexPath.section].bookItems[indexPath.row])
+            pushViewController(vc)
         }
-        navigationController?.pushViewController(vc!, animated: true)
     }
+    private func pushViewController(_ viewController: UIViewController) {
+        guard let navController = navigationController else {
+            print("Navigation controller is not available.")
+            return
+        }
+        navController.pushViewController(viewController, animated: true)
+    }
+}
+
+struct TableBookData {
+    var header: String
+    var footer: String?
+    var bookItems: [BookItem]
+    
+    static func mockBookData() -> [TableBookData] {
+        [
+            TableBookData(header: "Любимые книги", footer: "Рецензии и рейтинги обновляются еженедельно", bookItems: [
+                BookItem(
+                    author: "Джордж Оруэлл",
+                    title: "1984",
+                    icon: "book.fill",
+                    isFavorite: true,
+                    isCompleted: true,
+                    viewType: .artistic
+                ),
+                BookItem(
+                    author: "Роберт К. Мартин",
+                    title: "Чистый код",
+                    icon: "doc.plaintext.fill",
+                    isFavorite: true,
+                    isCompleted: false,
+                    viewType: .technical
+                ),
+                BookItem(
+                    author: "Джеймс Клир",
+                    title: "Атомные привычки",
+                    icon: "leaf.arrow.circlepath",
+                    isFavorite: false,
+                    isCompleted: false,
+                    viewType: .personalGrowth
+                ),
+                BookItem(
+                    author: "Дж. Р. Р. Толкин",
+                    title: "Властелин колец",
+                    icon: "figure.walk.motion.trianglebadge.exclamationmark",
+                    isFavorite: true,
+                    isCompleted: true,
+                    viewType: .artistic
+                ),
+                BookItem(
+                    author: "Михаил Булгаков",
+                    title: "Мастер и Маргарита",
+                    icon: "moon.fill",
+                    isFavorite: true,
+                    isCompleted: false,
+                    viewType: .artistic
+                ),
+            ]),
+            
+            TableBookData(header: "В процессе", footer: "Обновляется автоматически", bookItems: [
+                BookItem(
+                    author: "Стивен Кови",
+                    title: "7 навыков высокоэффективных людей",
+                    icon: "person.crop.circle.badge.checkmark",
+                    isFavorite: false,
+                    isCompleted: false,
+                    viewType: .personalGrowth
+                ),
+                BookItem(
+                    author: "Александр Дюма",
+                    title: "Граф Монте-Кристо",
+                    icon: "figure.arms.open",
+                    isFavorite: true,
+                    isCompleted: false,
+                    viewType: .artistic
+                ),
+                BookItem(
+                    author: "Карл Саган",
+                    title: "Космос",
+                    icon: "sun.max.fill",
+                    isFavorite: true,
+                    isCompleted: false,
+                    viewType: .technical
+                ),
+            ])
+        ]
+    }
+}
+
+enum TypesViewController {
+    case artistic, technical, personalGrowth
+}
+
+struct BookItem {
+    let author: String
+    let title: String
+    let icon: String
+    let isFavorite: Bool
+    let isCompleted: Bool
+    let viewType: TypesViewController
 }
