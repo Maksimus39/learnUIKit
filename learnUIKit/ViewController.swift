@@ -1,50 +1,63 @@
-//
-//  ViewController.swift
-//  learnUIKit
-//
-//  Created by Максим Минаков on 14.11.2025.
-//
-
 import UIKit
 
-class ViewController: UIViewController {
 
+struct TableData {
+    var image: String
+    var title: String
+    var description: String
+    
+    static func mockData() -> [TableData] {
+        [
+            TableData(image: "img1", title: "img_1", description: "description_1"),
+            TableData(image: "img2", title: "img_2", description: "description_2"),
+            TableData(image: "img1", title: "img_3", description: "description_ 3ииорпроп ормормром ормромор мормор"),
+            TableData(image: "img2", title: "img_4", description: "description_4 description_ 3ииорпроп ормормром ормромор мормор"),
+        ]
+    }
+}
+
+
+class ViewController: UIViewController {
+    
+    // 1 регистрирую данные
+    private let tableData = TableData.mockData()
+    
+    // 2 создаю таблицу
+    lazy var tableView: UITableView = {
+        $0.register(ItemCell.self, forCellReuseIdentifier: "tableDataCell")
+        $0.dataSource = self
+        $0.separatorStyle = .none
+        $0.delegate = self
+        return $0
+    }(UITableView(frame: view.frame, style: .plain))
+    
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
-        print("Hello")
-        
         view.backgroundColor = .orange
-        // label
-        let label = UILabel()
-        label.text = "Hello world"
-        label.frame = CGRect(x: 100, y: 100, width: 300, height: 50)
-        label.textColor = .blue
-        label.font = .systemFont(ofSize: 50)
-        view.addSubview(label)
-        print(view.frame)
-        
-        // image
-        let someImageView = UIImageView()
-        someImageView.frame = CGRect(x: 100, y: 200, width: 300, height: 300)
-        someImageView.backgroundColor = .green
-        someImageView.image = UIImage(named: "img1")
-        someImageView.contentMode = .scaleAspectFill
-        view.addSubview(someImageView)
-        
-        // button
-        let action = UIAction { _ in
-            someImageView.frame = self.view.frame
-        }
-        
-        let button = UIButton(frame: CGRect(x: 50,
-                                            y: 600,
-                                            width: 200,
-                                            height: 80), primaryAction: action)
-        
-        button.setTitle("btn", for: .normal)
-        button.backgroundColor = .green
-        view.addSubview(button)
+        view.addSubview(tableView)
+    }
+}
+
+extension ViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        tableData.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "tableDataCell", for: indexPath) as! ItemCell
+        let item = tableData[indexPath.row]
+        cell.configure(with: item) 
+        cell.selectionStyle = .none
+        return cell
+    }
+}
+
+
+extension ViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print(tableData[indexPath.row])
     }
 }
 
