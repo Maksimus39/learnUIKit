@@ -1,7 +1,7 @@
 import UIKit
 
 struct TableDataCell {
-    var titleCustomCell: String = "Подробное описание карточки"
+    var titleCustomCell: String = "Карточка для "
     var avatar: String
     var userName: String
     var cellImage:  String

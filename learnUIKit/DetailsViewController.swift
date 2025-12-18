@@ -25,7 +25,7 @@ class DetailsViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .white
         
-        title = item.titleCustomCell
+        title = item.titleCustomCell + item.userName
         
         navigationItem.largeTitleDisplayMode = .never
         
@@ -67,7 +67,7 @@ extension DetailsViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "DetailsCell", for: indexPath) as! DetailsCell
         cell.configure(with: item)
-        cell.selectionStyle = .none
+        
         return cell
     }
     
