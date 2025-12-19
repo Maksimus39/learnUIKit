@@ -1,50 +1,57 @@
-//
-//  ViewController.swift
-//  learnUIKit
-//
-//  Created by Максим Минаков on 14.11.2025.
-//
-
 import UIKit
 
-class ViewController: UIViewController {
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view.
-        print("Hello")
-        
-        view.backgroundColor = .orange
-        // label
-        let label = UILabel()
-        label.text = "Hello world"
-        label.frame = CGRect(x: 100, y: 100, width: 300, height: 50)
-        label.textColor = .blue
-        label.font = .systemFont(ofSize: 50)
-        view.addSubview(label)
-        print(view.frame)
-        
-        // image
-        let someImageView = UIImageView()
-        someImageView.frame = CGRect(x: 100, y: 200, width: 300, height: 300)
-        someImageView.backgroundColor = .green
-        someImageView.image = UIImage(named: "img1")
-        someImageView.contentMode = .scaleAspectFill
-        view.addSubview(someImageView)
-        
-        // button
-        let action = UIAction { _ in
-            someImageView.frame = self.view.frame
-        }
-        
-        let button = UIButton(frame: CGRect(x: 50,
-                                            y: 600,
-                                            width: 200,
-                                            height: 80), primaryAction: action)
-        
-        button.setTitle("btn", for: .normal)
-        button.backgroundColor = .green
-        view.addSubview(button)
+struct TableDataCell {
+    var titleCustomCell: String = "Карточка для "
+    var avatar: String
+    var userName: String
+    var cellImage:  String
+    var description: String
+    
+    static func mockData() -> [TableDataCell] {
+        [
+            TableDataCell(avatar: "avatar1",
+                          userName: "Ivanov Ivan",
+                          cellImage: "img1",
+                          description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book"),
+            TableDataCell(avatar: "avatar2",
+                          userName: "Petrov Petya",
+                          cellImage: "img2",
+                          description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book"),
+            TableDataCell(avatar: "avatar3",
+                          userName: "Sidorov Sidr",
+                          cellImage: "img3",
+                          description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book"),
+            TableDataCell(avatar: "avatar1",
+                          userName: "Ivanov Ivan",
+                          cellImage: "img1",
+                          description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book"),
+            TableDataCell(avatar: "avatar2",
+                          userName: "Petrov Petya",
+                          cellImage: "img2",
+                          description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book"),
+            TableDataCell(avatar: "avatar3",
+                          userName: "Sidorov Sidr",
+                          cellImage: "img3",
+                          description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book"),
+        ]
     }
 }
 
+class ViewController: UIViewController {
+   
+    lazy var layout: UICollectionViewFlowLayout = {
+        $0.itemSize = CGSize(width: 200, height: 200)
+        return $0
+    }(UICollectionViewFlowLayout())
+    
+    lazy var collectionView: UICollectionView = {
+        
+        return $0
+    }(UICollectionView(frame: view.frame, collectionViewLayout: layout))
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        view.backgroundColor = .white
+    }
+}
