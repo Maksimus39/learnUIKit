@@ -14,7 +14,7 @@
 					<key>payload</key>
 					<dict>
 						<key>relative-path</key>
-						<string>learnUIKit/ItemCustomCell.swift</string>
+						<string>learnUIKit/ViewController.swift</string>
 					</dict>
 				</dict>
 				<key>type</key>
