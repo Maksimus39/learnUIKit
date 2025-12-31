@@ -2,44 +2,71 @@ import UIKit
 
 class ViewController: UIViewController {
     
-    private let cellCoreData = CoreSectionData.mockCoreDataRace()
+    private lazy var tableData: [ProductViewModel] = ProductViewModel.mockGameData()
+    private lazy var titleCornerView: String = ProductViewModel.mockGameData().first?.title ?? "Anthology Gears of War"
+    private lazy var iconTitleCornerView: String = ProductViewModel.mockGameData().first?.iconTitle ?? "Погнали смотреть"
+    private let gameCellID = UUID().uuidString
     
-    lazy var layout: UICollectionViewFlowLayout = {
-        $0.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
-        $0.scrollDirection = .vertical
-        $0.minimumLineSpacing = 10
-        //$0.sectionInset = UIEdgeInsets(top: 0, left: 10, bottom: 10, right: 10)
-        return $0
-    }(UICollectionViewFlowLayout())
-    
-    lazy var collectionView: UICollectionView = {
+    private lazy var tableGameView: UITableView = {
         $0.dataSource = self
-        view.backgroundColor = .clear
-        $0.register(CollectionCell.self, forCellWithReuseIdentifier: CollectionCell.cellID.uuidString)
+        $0.delegate = self
+        $0.register(UITableViewCell.self, forCellReuseIdentifier: gameCellID)
         return $0
-    }(UICollectionView(frame: view.frame, collectionViewLayout: layout))
+    }(UITableView(frame: view.frame, style: .insetGrouped))
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.addSubview(collectionView)
+        view.backgroundColor = .white
+        view.addSubview(tableGameView)
+        navigationController?.navigationBar.prefersLargeTitles = true
+        title = titleCornerView
+        tableGameView.delegate = self
     }
 }
 
-
-extension ViewController: UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        cellCoreData.count
+extension ViewController: UITableViewDataSource {
+    func numberOfSections(in tableView: UITableView) -> Int {
+        tableData.count
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CollectionCell.cellID.uuidString, for: indexPath) as! CollectionCell
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+       return 1
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let gameCell = tableView.dequeueReusableCell(withIdentifier: gameCellID, for: indexPath)
+        let currentCell = tableData[indexPath.section]
+        var config = gameCell.defaultContentConfiguration()
+        config.image = UIImage(systemName: currentCell.icon)
+        config.text = iconTitleCornerView
+        gameCell.backgroundColor = .systemFill
+        gameCell.contentConfiguration = config
         
-        let tableItem = cellCoreData[indexPath.section].item[indexPath.row]
-        cell.setupCell(item: tableItem)
-        
-        return cell
+        return gameCell
+    }
+    
+    func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
+        tableData[section].footer
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        tableData[section].header
     }
 }
+
+extension ViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+        
+        let selectGameSection = tableData[indexPath.section]
+        
+        let gameVC = GameCustomCellViewController(gameCellItems: selectGameSection.itemGame)
+        navigationController?.pushViewController(gameVC, animated: true)
+    }
+}
+
 
 
 
