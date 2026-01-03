@@ -1,7 +1,8 @@
-import Foundation
+import UIKit
 
 struct ProductViewModel {
     
+    let color = UIColor(red: 0.92, green: 0.27, blue: 0.31, alpha: 1.0)
     let title: String = "Gears of War"
     let header: String
     let footer: String

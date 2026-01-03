@@ -5,19 +5,22 @@ class ViewController: UIViewController {
     private lazy var tableData: [ProductViewModel] = ProductViewModel.mockGameData()
     private lazy var titleCornerView: String = ProductViewModel.mockGameData().first?.title ?? "Anthology Gears of War"
     private lazy var iconTitleCornerView: String = ProductViewModel.mockGameData().first?.iconTitle ?? "Погнали смотреть"
-    private let gameCellID = UUID().uuidString
+    private lazy var colorViewController = ProductViewModel.mockGameData().first?.color ?? UIColor.white
+    private let gameCellID = "gameCellID"
     
     private lazy var tableGameView: UITableView = {
         $0.dataSource = self
         $0.delegate = self
+        $0.backgroundColor = colorViewController
         $0.register(UITableViewCell.self, forCellReuseIdentifier: gameCellID)
+                
         return $0
     }(UITableView(frame: view.frame, style: .insetGrouped))
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = colorViewController
         view.addSubview(tableGameView)
         navigationController?.navigationBar.prefersLargeTitles = true
         title = titleCornerView
@@ -31,7 +34,7 @@ extension ViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-       return 1
+        return 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

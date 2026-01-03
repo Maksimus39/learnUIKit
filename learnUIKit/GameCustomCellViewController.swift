@@ -2,6 +2,7 @@ import UIKit
 
 class GameCustomCellViewController: UIViewController {
     
+    private lazy var colorViewController = ProductViewModel.mockGameData().first?.color ?? UIColor.white
     private let gameCellItems: [GameItem]
     
     init(gameCellItems: [GameItem]) {
@@ -18,8 +19,8 @@ class GameCustomCellViewController: UIViewController {
     
     lazy var collectionView: UICollectionView = {
         $0.dataSource = self
-        $0.register(GameCellViewController.self, forCellWithReuseIdentifier: GameCellViewController.gameCellReuseIdentifier.uuidString)
-        $0.backgroundColor = .white
+        $0.register(GameCellViewController.self, forCellWithReuseIdentifier: GameCellViewController.gameCellReuseIdentifier)
+        $0.backgroundColor = colorViewController
         return $0
     }(UICollectionView(frame: view.frame, collectionViewLayout: gameLayout))
     
@@ -41,7 +42,15 @@ extension GameCustomCellViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let gameCell = collectionView.dequeueReusableCell(withReuseIdentifier: GameCellViewController.gameCellReuseIdentifier.uuidString, for: indexPath)
+        guard let gameCell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: GameCellViewController.gameCellReuseIdentifier,
+            for: indexPath
+        ) as? GameCellViewController else {
+            return UICollectionViewCell()
+        }
+        
+        let gameItem = gameCellItems[indexPath.item]
+        gameCell.configure(with: gameItem)
         
         return gameCell
     }
