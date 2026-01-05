@@ -11,6 +11,14 @@ struct CollectionSection: Identifiable {
             CollectionItem(image: "img2" , name: "Name1"),
             CollectionItem(image: "img3" , name: "Name1"),
             CollectionItem(image: "img4" , name: "Name1"),
+            CollectionItem(image: "img1" , name: "Name1"),
+            CollectionItem(image: "img2" , name: "Name1"),
+            CollectionItem(image: "img3" , name: "Name1"),
+            CollectionItem(image: "img4" , name: "Name1"),
+            CollectionItem(image: "img1" , name: "Name1"),
+            CollectionItem(image: "img2" , name: "Name1"),
+            CollectionItem(image: "img3" , name: "Name1"),
+            CollectionItem(image: "img4" , name: "Name1"),
         ]
         
         let messageItems = [
@@ -38,7 +46,10 @@ struct CollectionSection: Identifiable {
         let newsSection = CollectionSection(items: newsItems)
         let bannerSection = CollectionSection(items: bannerItems)
         
-        return [storySection, messageSection, newsSection, bannerSection]
+        return [storySection,
+                messageSection,
+                // newsSection, bannerSection
+        ]
     }
 }
 
