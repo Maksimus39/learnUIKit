@@ -1,81 +1,132 @@
 import UIKit
 
 class ViewController: UIViewController {
+    lazy var textCreateText: String = """
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                    """
     
-    private let images: [UIImage] = [.img1, .img2, .img3]
+    lazy var textDescription: String = """
+           Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+           """
     
-    lazy var stackView: UIStackView = {
-        //$0.backgroundColor = .brown
-        $0.translatesAutoresizingMaskIntoConstraints = false
-        $0.axis = .horizontal
-        $0.alignment = .fill
-        $0.distribution = .fillEqually
-        $0.spacing = 10
-        
-        return $0
-    }(UIStackView())
+    enum Fonts {
+        static let regular = UIFont.systemFont(ofSize: 16, weight: .regular)
+        static let medium = UIFont.systemFont(ofSize: 16, weight: .medium)
+        static let bold = UIFont.systemFont(ofSize: 16, weight: .bold)
+    }
     
-    lazy var scrollView: UIScrollView = {
-        $0.translatesAutoresizingMaskIntoConstraints = false
-        $0.backgroundColor = .red
-        $0.addSubview(scrollViewContent)
-        return $0
-    }(UIScrollView())
     
-    lazy var scrollViewContent: UIImageView = {
-        $0.translatesAutoresizingMaskIntoConstraints = false
-        //$0.backgroundColor = .yellow
-        $0.contentMode = .scaleAspectFit
-        $0.image = .img1
-        return $0
-    }(UIImageView())
+    private let scrollView = UIScrollView()
+    private let contentView = UIView()
+    
+    private let headerView = HeaderView(name: "Анна", image: UIImage(named: "anna"))
+    private let secondPhotoStackView = SecondPhotoStackView()
+    private let threePhotoView = ThreePhotoStackView(images: [.photo5, .photo6])
+    private let descriptionLabelStack = DescriptionView(description: "Description", titleButton: "See All")
+    
+    private lazy var textSection = createText(text: textCreateText, font: Fonts.regular)
+    private lazy var textSectionDeccription = createText(text: textDescription, font: Fonts.regular)
+    private lazy var photosSection = createText(text: "Photos", font: Fonts.bold)
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.addSubview(stackView)
-        view.addSubview(scrollView)
         view.backgroundColor = .white
         
-        images.forEach { img in
-            let img = SomeImage(image: img)
-            stackView.addArrangedSubview(img)
-        }
+        setupScrollView()
+        setupLayout()
+    }
+    
+    func createText(text: String, font: UIFont) -> UILabel {
+        let txt = UILabel()
+        txt.text = text
+        txt.textColor = .black
+        txt.numberOfLines = 0
+        txt.translatesAutoresizingMaskIntoConstraints = false
+        txt.font = font
+        return txt
+    }
+    
+    private func setupScrollView() {
+        view.addSubview(scrollView)
+        scrollView.addSubview(contentView)
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            // constraint stackView
-            stackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            stackView.heightAnchor.constraint(equalToConstant: 100),
+            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             
-            // constraint scrollView
-            scrollView.topAnchor.constraint(equalTo: stackView.bottomAnchor, constant: 30),
-            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -20),
+            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
             
-            // constraint scrollViewContent
-            scrollViewContent.topAnchor.constraint(equalTo: scrollView.topAnchor),
-            scrollViewContent.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
-            scrollViewContent.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
-            scrollViewContent.heightAnchor.constraint(equalToConstant: 1200),
-            scrollViewContent.widthAnchor.constraint(equalToConstant: 200),
+            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
+        ])
+    }
+    
+    private func setupLayout() {
+        contentView.addSubview(headerView)
+        contentView.addSubview(secondPhotoStackView)
+        contentView.addSubview(textSection)
+        contentView.addSubview(photosSection)
+        contentView.addSubview(threePhotoView)
+        contentView.addSubview(descriptionLabelStack)
+        contentView.addSubview(textSectionDeccription)
+        
+        headerView.translatesAutoresizingMaskIntoConstraints = false
+        secondPhotoStackView.translatesAutoresizingMaskIntoConstraints = false
+        threePhotoView.translatesAutoresizingMaskIntoConstraints = false
+        descriptionLabelStack.translatesAutoresizingMaskIntoConstraints = false
+        textSectionDeccription.translatesAutoresizingMaskIntoConstraints = false
+        
+        setupConstraints()
+    }
+    
+    private func setupConstraints() {
+        NSLayoutConstraint.activate([
+            // constraint headerView
+            headerView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            headerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
+            headerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
+            headerView.heightAnchor.constraint(equalToConstant: 64),
+            
+            // constraint secondPhotoStackView
+            secondPhotoStackView.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: 26),
+            secondPhotoStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
+            secondPhotoStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
+            secondPhotoStackView.heightAnchor.constraint(equalToConstant: 80),
+            
+            // constraint textSection
+            textSection.topAnchor.constraint(equalTo: secondPhotoStackView.bottomAnchor, constant: 26),
+            textSection.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
+            textSection.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
+            
+            // constraint photosSection
+            photosSection.topAnchor.constraint(equalTo: textSection.bottomAnchor, constant: 42),
+            photosSection.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
+            photosSection.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
+            photosSection.heightAnchor.constraint(equalToConstant: 19),
+            
+            // constraint threePhotoView
+            threePhotoView.topAnchor.constraint(equalTo: photosSection.bottomAnchor, constant: 18),
+            threePhotoView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
+            threePhotoView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
+            threePhotoView.heightAnchor.constraint(equalToConstant: 110),
+            
+            // constraint descriptionLabelStack
+            descriptionLabelStack.topAnchor.constraint(equalTo: threePhotoView.bottomAnchor, constant: 42),
+            descriptionLabelStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
+            descriptionLabelStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
+            descriptionLabelStack.heightAnchor.constraint(equalToConstant: 19),
+            
+            // constraint textSectionDeccription
+            textSectionDeccription.topAnchor.constraint(equalTo: descriptionLabelStack.bottomAnchor, constant: 18),
+            textSectionDeccription.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
+            textSectionDeccription.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
+            textSectionDeccription.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
         ])
     }
 }
-
-class SomeImage: UIImageView {
-    init(image: UIImage) {
-        super.init(frame: .zero)
-        translatesAutoresizingMaskIntoConstraints = false
-        self.image = image
-        contentMode = .scaleAspectFill
-        clipsToBounds = true
-        layer.cornerRadius  = 10
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-}
-
