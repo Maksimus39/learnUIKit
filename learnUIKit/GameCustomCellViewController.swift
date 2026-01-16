@@ -19,7 +19,8 @@ class GameCustomCellViewController: UIViewController {
     
     lazy var collectionView: UICollectionView = {
         $0.dataSource = self
-        $0.register(GameCellViewController.self, forCellWithReuseIdentifier: GameCellViewController.gameCellReuseIdentifier)
+        $0.register(GameCellViewController.self,
+                    forCellWithReuseIdentifier: GameCellViewController.gameCellReuseIdentifier)
         $0.backgroundColor = colorViewController
         return $0
     }(UICollectionView(frame: view.frame, collectionViewLayout: gameLayout))
@@ -55,3 +56,4 @@ extension GameCustomCellViewController: UICollectionViewDataSource {
         return gameCell
     }
 }
+
