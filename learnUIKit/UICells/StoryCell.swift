@@ -1,6 +1,5 @@
 import UIKit
 
-
 class StoryCell: UICollectionViewCell {
     static let reuseIdentifier = "StoryCellReuseIdentifier"
     
@@ -161,11 +160,21 @@ class NewsCell: UICollectionViewCell {
 class BannerCell: UICollectionViewCell {
     static let reuseIdentifier = "BannerCellReuseIdentifier"
     
+    var originSize: CGAffineTransform?
+    
     lazy var imageView: UIImageView = {
+        let tapGest = UITapGestureRecognizer(target: self, action: #selector(tapGestFunc)) // реализация жеста
+        let pinchGest = UIPinchGestureRecognizer(target: self, action: #selector(pinchGestFunc)) // реализация жеста
+        
         $0.translatesAutoresizingMaskIntoConstraints = false
         $0.layer.cornerRadius = 15
-        $0.contentMode = .scaleToFill
+        $0.contentMode = .scaleAspectFill
         $0.clipsToBounds = true
+        $0.isUserInteractionEnabled = true // <- жест
+        
+        $0.addGestureRecognizer(tapGest)   // добавил жест
+        $0.addGestureRecognizer(pinchGest)   // добавил жест
+        self.originSize = $0.transform
         return $0
     }(UIImageView())
     
@@ -189,7 +198,112 @@ class BannerCell: UICollectionViewCell {
         imageView.image = UIImage(named: item.image)
     }
     
+    // функция реализации жеста
+    @objc func tapGestFunc() {
+        print("tap")
+    }
+    
+    @objc func pinchGestFunc(gest: UIPinchGestureRecognizer) {
+        guard let gestView = gest.view else { return }
+        
+        if gest.state == .began {
+           
+            if let contentView = gestView.superview,
+               let cell = contentView.superview as? BannerCell,
+               let collectionView = cell.superview as? UICollectionView {
+                
+                collectionView.bringSubviewToFront(cell)
+                
+                cell.layer.zPosition = 9999
+              
+                cell.contentView.bringSubviewToFront(gestView)
+                gestView.layer.zPosition = 10000
+            }
+        }
+        
+        gestView.transform = gestView.transform.scaledBy(x: gest.scale, y: gest.scale)
+        
+        if gest.state == .ended {
+            UIView.animate(withDuration: 0.2) {
+                gestView.transform = self.originSize ?? .init(scaleX: 1, y: 1)
+            } completion: { _ in
+                // Сбрасываем позиции
+                if let contentView = gestView.superview,
+                   let cell = contentView.superview as? BannerCell {
+                    cell.layer.zPosition = 0
+                    gestView.layer.zPosition = 0
+                }
+            }
+        }
+        gest.scale = 1
+    }
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 }
+
+class PhotoCell: UICollectionViewCell {
+    static let reuseIdentifier = "PhotoCellReuseIdentifier"
+    
+    let imageView: UIImageView = {
+        $0.contentMode = .scaleAspectFill
+        $0.clipsToBounds = true
+        $0.layer.cornerRadius = 10
+        $0.translatesAutoresizingMaskIntoConstraints = false
+        return $0
+    }(UIImageView())
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        contentView.addSubview(imageView)
+        setupConstraints()
+    }
+    
+    private func setupConstraints() {
+        NSLayoutConstraint.activate([
+            imageView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            imageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            imageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            imageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+        ])
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+class Biography: UICollectionViewCell {
+    static let reuseIdentifier = "BioCellReuseIdentifier"
+    
+    let textView: UITextView = {
+        $0.isEditable = false
+        $0.font = UIFont.systemFont(ofSize: 19)
+        $0.isScrollEnabled = false
+        $0.backgroundColor = .clear
+        $0.textColor = .white
+        $0.translatesAutoresizingMaskIntoConstraints = false
+        return $0
+    }(UITextView())
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        contentView.addSubview(textView)
+        setupConstraints()
+    }
+    
+    private func setupConstraints() {
+        NSLayoutConstraint.activate([
+            textView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
+            textView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
+            textView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
+            textView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10)
+        ])
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
